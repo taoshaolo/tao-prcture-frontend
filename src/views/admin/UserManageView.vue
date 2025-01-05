@@ -3,10 +3,10 @@
     <!-- 搜索 -->
     <a-form layout="inline" :model="searchParams" @finish="doSearch">
       <a-form-item label="账号">
-        <a-input v-model:value="searchParams.userAccount" placeholder="输入账号" allow-clear />
+        <a-input v-model:value="searchParams.userAccount" placeholder="请输入账号" allow-clear />
       </a-form-item>
       <a-form-item label="用户名">
-        <a-input v-model:value="searchParams.userName" placeholder="输入用户名" allow-clear />
+        <a-input v-model:value="searchParams.userName" placeholder="请输入用户名" allow-clear />
       </a-form-item>
       <a-form-item>
         <a-button type="primary" html-type="submit">搜索</a-button>
