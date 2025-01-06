@@ -52,7 +52,7 @@
                   <a-tag color="green">
                     {{ picture.category ?? '默认' }}
                   </a-tag>
-                  <a-tag v-for="tag in picture.tags" :key="tag">
+                  <a-tag color="cyan" v-for="tag in picture.tags" :key="tag">
                     {{ tag }}
                   </a-tag>
                 </a-flex>
