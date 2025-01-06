@@ -86,6 +86,7 @@
           </div>
           <div>审核信息：{{ record.reviewMessage }}</div>
           <div>审核人：{{ record.reviewerId }}</div>
+          <div>审核时间：{{ dayjs(record.reviewTime).format('YYYY-MM-DD HH:mm:ss') }}</div>
         </template>
 
         <template v-if="column.dataIndex === 'createTime'">
