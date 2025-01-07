@@ -61,7 +61,9 @@
         <template v-if="column.dataIndex === 'url'">
           <a-image :src="record.url" :width="120" />
         </template>
-
+        <template v-if="column.dataIndex === 'introduction'">
+          <div style="word-wrap: break-word; white-space: normal;">{{ record.introduction }}</div>
+        </template>
         <template v-if="column.dataIndex === 'tags'">
           <a-space wrap>
             <a-tag color="cyan" v-for="tag in JSON.parse(record.tags || '[]')" :key="tag">
@@ -123,7 +125,14 @@
             <a-button type="link" :href="`/add_picture?id=${record.id}`" target="_blank">
               编辑
             </a-button>
-            <a-button danger @click="doDelete(record.id)">删除</a-button>
+            <a-popconfirm
+              title="你确定删除吗？"
+              ok-text="是"
+              cancel-text="否"
+              @confirm="doDelete(record.id)"
+            >
+              <a-button danger>删除</a-button>
+            </a-popconfirm>
           </a-space>
         </template>
       </template>
