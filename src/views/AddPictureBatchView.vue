@@ -4,7 +4,31 @@
     <!-- 图片信息表单 -->
     <a-form name="formData" layout="vertical" :model="formData" @finish="handleSubmit">
       <a-form-item name="searchText" label="关键词">
-        <a-input v-model:value="formData.name" placeholder="请输入关键词" allow-clear />
+        <a-input v-model:value="formData.searchText" placeholder="请输入关键词" allow-clear />
+      </a-form-item>
+      <a-form-item name="namePrefix" label="名称前缀">
+        <a-input
+          v-model:value="formData.namePrefix"
+          placeholder="请输入名称前缀，会自动补充序号"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item name="category" label="分类">
+        <a-auto-complete
+          v-model:value="formData.category"
+          placeholder="请输入分类"
+          :options="categoryOptions"
+          allow-clear
+        />
+      </a-form-item>
+      <a-form-item name="tags" label="标签">
+        <a-select
+          v-model:value="formData.tags"
+          mode="tags"
+          placeholder="请输入标签"
+          :options="tagOptions"
+          allow-clear
+        />
       </a-form-item>
       <a-form-item name="count" label="抓取数量">
         <a-input-number
@@ -16,30 +40,6 @@
           allow-clear
         />
       </a-form-item>
-      <a-form-item name="namePrefix" label="名称前缀">
-        <a-input
-          v-model:value="formData.namePrefix"
-          placeholder="请输入名称前缀，会自动补充序号"
-          allow-clear
-        />
-      </a-form-item>
-      <!--      <a-form-item name="category" label="分类">-->
-      <!--        <a-auto-complete-->
-      <!--          v-model:value="formData.category"-->
-      <!--          placeholder="请输入分类"-->
-      <!--          :options="categoryOptions"-->
-      <!--          allow-clear-->
-      <!--        />-->
-      <!--      </a-form-item>-->
-      <!--      <a-form-item name="tags" label="标签">-->
-      <!--        <a-select-->
-      <!--          v-model:value="formData.tags"-->
-      <!--          mode="tags"-->
-      <!--          placeholder="请输入标签"-->
-      <!--          :options="tagOptions"-->
-      <!--          allow-clear-->
-      <!--        />-->
-      <!--      </a-form-item>-->
       <a-form-item>
         <a-button type="primary" html-type="submit" style="width: 100%" :loading="loading">
           批量创建
@@ -53,14 +53,16 @@
 import { onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import {
-  getPictureVoByIdUsingGet,
   listPictureTagCategoryUsingGet,
   uploadPictureByBatchUsingPost,
 } from '@/api/pictureController'
-import { useRoute, useRouter } from 'vue-router'
+import { useRouter } from 'vue-router'
 
-const formData = reactive<API.PictureEditRequest>({})
+const formData = reactive<API.PictureUploadByBatchRequest>({
+  count: 10,
+})
 const loading = ref(false)
+
 const router = useRouter()
 
 const handleSubmit = async (values: any) => {
@@ -106,7 +108,6 @@ const getTagCategoryOptions = async () => {
 onMounted(() => {
   getTagCategoryOptions()
 })
-
 </script>
 
 <style scoped>
