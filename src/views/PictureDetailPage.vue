@@ -60,12 +60,19 @@
                 <EditOutlined />
               </template>
             </a-button>
-            <a-button v-if="canEdit" danger @click="doDelete">
-              删除
-              <template #icon>
-                <DeleteOutlined />
-              </template>
-            </a-button>
+            <a-popconfirm
+              title="你确定删除吗？"
+              ok-text="是"
+              cancel-text="否"
+              @confirm="doDelete"
+            >
+              <a-button v-if="canEdit" danger>
+                删除
+                <template #icon>
+                  <DeleteOutlined />
+                </template>
+              </a-button>
+            </a-popconfirm>
           </a-space>
         </a-card>
       </a-col>
@@ -74,14 +81,13 @@
 </template>
 
 <script setup lang="ts">
-import {deletePictureUsingPost, getPictureVoByIdUsingGet} from '@/api/pictureController'
+import { deletePictureUsingPost, getPictureVoByIdUsingGet } from '@/api/pictureController'
 import { message } from 'ant-design-vue'
 import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
-import {defineProps, onMounted, ref, computed} from 'vue'
-import {downloadImage, formatSize} from '@/utils'
-import {useRouter} from "vue-router";
-import {useLoginUserStore} from "@/stores/useLoginUserStore";
-
+import { defineProps, onMounted, ref, computed } from 'vue'
+import { downloadImage, formatSize } from '@/utils'
+import { useRouter } from 'vue-router'
+import { useLoginUserStore } from '@/stores/useLoginUserStore'
 
 const props = defineProps<{
   id: string | number
@@ -90,7 +96,7 @@ const props = defineProps<{
 const loginUserStore = useLoginUserStore()
 // 是否具有编辑权限
 const canEdit = computed(() => {
-  const loginUser = loginUserStore.loginUser;
+  const loginUser = loginUserStore.loginUser
   // 未登录不可编辑
   if (!loginUser.id) {
     return false
@@ -99,8 +105,6 @@ const canEdit = computed(() => {
   const user = picture.value.user || {}
   return loginUser.id === user.id || loginUser.userRole === 'admin'
 })
-
-
 
 // 删除
 const doDelete = async () => {
@@ -112,12 +116,11 @@ const doDelete = async () => {
   if (res.data.code === 0) {
     message.success('删除成功')
     // 返回到上一级视图
-    window.history.back();
+    window.history.back()
   } else {
     message.error('删除失败')
   }
 }
-
 
 const picture = ref<API.PictureVO>({})
 
@@ -152,8 +155,6 @@ const doEdit = () => {
 const doDownload = () => {
   downloadImage(picture.value.url)
 }
-
-
 </script>
 
 <style scoped>
