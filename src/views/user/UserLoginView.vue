@@ -2,17 +2,12 @@
   <div id="userLoginView">
     <h2 class="title">涛少云图库 - 用户登录</h2>
     <div class="desc">免费获取海量图片</div>
-    <a-form :model="formState" name="basic" @finish="handleSubmit" v-bind="layout" >
-      <a-form-item
-        label="账号"
-        name="userAccount"
-        :rules="[{ required: true, message: '请输入账号' }]"
-      >
+    <a-form :model="formState" name="basic" @finish="handleSubmit">
+      <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]">
         <a-input v-model:value="formState.userAccount" placeholder="请输入账号" />
       </a-form-item>
 
       <a-form-item
-        label="密码"
         name="userPassword"
         :rules="[
           { required: true, message: '请输入密码' },
@@ -39,9 +34,6 @@ import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 
-const layout = {
-  labelCol: { span: 5 },
-}
 
 const formState = reactive<API.UserLoginRequest>({
   userAccount: '',

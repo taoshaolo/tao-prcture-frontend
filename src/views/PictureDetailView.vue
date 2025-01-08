@@ -1,5 +1,5 @@
 <template>
-  <div id="pictureDetailPage">
+  <div id="pictureDetailView">
     <a-row :gutter="[16, 16]">
       <!-- 图片展示区 -->
       <a-col :sm="24" :md="16" :xl="18">
@@ -83,14 +83,16 @@
 <script setup lang="ts">
 import { deletePictureUsingPost, getPictureVoByIdUsingGet } from '@/api/pictureController'
 import { message } from 'ant-design-vue'
-import { EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
+import { DownloadOutlined, EditOutlined, DeleteOutlined } from '@ant-design/icons-vue'
 import { defineProps, onMounted, ref, computed } from 'vue'
 import { downloadImage, formatSize } from '@/utils'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 
+const picture = ref<API.PictureVO>({})
+
 const props = defineProps<{
-  id: string | number
+  id: number
 }>()
 
 const loginUserStore = useLoginUserStore()
@@ -122,7 +124,7 @@ const doDelete = async () => {
   }
 }
 
-const picture = ref<API.PictureVO>({})
+
 
 // 获取图片详情
 const fetchPictureDetail = async () => {
@@ -148,7 +150,13 @@ const router = useRouter()
 
 // 编辑
 const doEdit = () => {
-  router.push('/add_picture?id=' + picture.value.id)
+  router.push({
+    path: '/add_picture',
+    query: {
+      id: picture.value.id,
+      spaceId: picture.value.spaceId,
+    },
+  })
 }
 
 // 处理下载
@@ -158,7 +166,7 @@ const doDownload = () => {
 </script>
 
 <style scoped>
-#pictureDetailPage {
+#pictureDetailView {
   margin-bottom: 16px;
 }
 </style>

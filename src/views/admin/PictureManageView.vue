@@ -62,7 +62,7 @@
           <a-image :src="record.url" :width="120" />
         </template>
         <template v-if="column.dataIndex === 'introduction'">
-          <div style="word-wrap: break-word; white-space: normal;">{{ record.introduction }}</div>
+          <div style="word-wrap: break-word; white-space: normal">{{ record.introduction }}</div>
         </template>
         <template v-if="column.dataIndex === 'tags'">
           <a-space wrap>
@@ -229,6 +229,7 @@ const searchParams = reactive<API.PictureQueryRequest>({
 const fetchData = async () => {
   const res = await listPictureByPageUsingPost({
     ...searchParams,
+    nullSpaceId: true,
   })
   if (res.data.code === 0 && res.data.data) {
     dataList.value = res.data.data.records ?? []
