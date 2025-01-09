@@ -7,9 +7,7 @@
         <a-tag color="blue">{{ SPACE_LEVEL_MAP[space.spaceLevel] }}</a-tag>
       </a-space>
       <a-space size="middle">
-        <a-button type="primary" :href="`/add_picture?spaceId=${id}`">
-          + 创建图片
-        </a-button>
+        <a-button type="primary" :href="`/add_picture?spaceId=${id}`"> + 创建图片 </a-button>
         <a-tooltip
           :title="`占用空间 ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`"
         >
@@ -21,7 +19,9 @@
         </a-tooltip>
       </a-space>
     </a-flex>
-    <div style="margin-bottom: 16px"/>
+    <div style="margin-bottom: 16px" />
+    <!-- 搜索表单 -->
+    <PictureSearchForm :onSearch="onSearch" />
     <!-- 图片列表 -->
     <PictureList :dataList="dataList" :loading="loading" :showOp="true" :onReload="fetchData" />
     <a-pagination
@@ -32,7 +32,6 @@
       :show-total="() => `图片总数 ${total} / ${space.maxCount}`"
       @change="onPageChange"
     />
-
   </div>
 </template>
 
@@ -43,7 +42,8 @@ import { SPACE_LEVEL_MAP } from '@/constants/space'
 import { defineProps, onMounted, reactive, ref } from 'vue'
 import { formatSize } from '@/utils'
 import { listPictureVoByPageUsingPost } from '@/api/pictureController'
-import PictureList from "@/components/PictureList.vue";
+import PictureList from '@/components/PictureList.vue'
+import PictureSearchForm from '@/components/PictureSearchForm.vue'
 
 const props = defineProps<{
   id: number
@@ -76,7 +76,7 @@ const total = ref(0)
 const loading = ref(true)
 
 // 搜索条件
-const searchParams = reactive<API.PictureQueryRequest>({
+const searchParams = ref<API.PictureQueryRequest>({
   current: 1,
   pageSize: 12,
   sortField: 'createTime',
@@ -85,8 +85,8 @@ const searchParams = reactive<API.PictureQueryRequest>({
 
 // 分页参数
 const onPageChange = (page, pageSize) => {
-  searchParams.current = page
-  searchParams.pageSize = pageSize
+  searchParams.value.current = page
+  searchParams.value.pageSize = pageSize
   fetchData()
 }
 
@@ -96,7 +96,7 @@ const fetchData = async () => {
   // 转换搜索参数
   const params = {
     spaceId: props.id,
-    ...searchParams,
+    ...searchParams.value,
   }
   const res = await listPictureVoByPageUsingPost(params)
   if (res.data.data) {
@@ -112,6 +112,15 @@ const fetchData = async () => {
 onMounted(() => {
   fetchData()
 })
+
+const onSearch = (newSearchParams: API.PictureQueryRequest) => {
+  searchParams.value = {
+    ...searchParams.value,
+    ...newSearchParams,
+    current: 1,
+  }
+  fetchData()
+}
 </script>
 
 <style scoped>
