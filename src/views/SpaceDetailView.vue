@@ -8,6 +8,9 @@
       </a-space>
       <a-space size="middle">
         <a-button type="primary" :href="`/add_picture?spaceId=${id}`"> + 创建图片</a-button>
+        <a-button type="primary" ghost :icon="h(EditOutlined)" @click="doBatchEdit">
+          批量编辑
+        </a-button>
         <a-tooltip
           :title="`占用空间 ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`"
         >
@@ -38,6 +41,12 @@
       :show-total="() => `图片总数 ${total} / ${space.maxCount}`"
       @change="onPageChange"
     />
+    <BatchEditPictureModal
+      ref="batchEditPictureModalRef"
+      :spaceId="id"
+      :pictureList="dataList"
+      :onSuccess="onBatchEditPictureSuccess"
+    />
   </div>
 </template>
 
@@ -45,7 +54,8 @@
 import { getSpaceVoByIdUsingGet } from '@/api/spaceController'
 import { message } from 'ant-design-vue'
 import { SPACE_LEVEL_MAP } from '@/constants/space'
-import { defineProps, onMounted, ref } from 'vue'
+import { defineProps, h, onMounted, ref } from 'vue'
+import { EditOutlined } from '@ant-design/icons-vue'
 import { formatSize } from '@/utils'
 import {
   listPictureVoByPageUsingPost,
@@ -55,6 +65,7 @@ import PictureList from '@/components/PictureList.vue'
 import PictureSearchForm from '@/components/PictureSearchForm.vue'
 import { ColorPicker } from 'vue3-colorpicker'
 import 'vue3-colorpicker/style.css'
+import BatchEditPictureModal from '@/components/BatchEditPictureModal.vue'
 
 const props = defineProps<{
   id: number
@@ -150,7 +161,20 @@ const onColorChange = async (color: string) => {
   loading.value = false
 }
 
+// 批量便编辑图片
+const batchEditPictureModalRef = ref()
 
+// 批量编辑图片成功
+const onBatchEditPictureSuccess = () => {
+  fetchData()
+}
+
+// 打开批量编辑图片弹窗
+const doBatchEdit = () => {
+  if (batchEditPictureModalRef.value) {
+    batchEditPictureModalRef.value.openModal()
+  }
+}
 </script>
 
 <style scoped>
