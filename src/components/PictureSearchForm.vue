@@ -40,7 +40,12 @@
         />
       </a-form-item>
       <a-form-item label="名称" name="name">
-        <a-input style="max-width: 120px" v-model:value="searchParams.name" placeholder="请输入名称" allow-clear />
+        <a-input
+          style="max-width: 120px"
+          v-model:value="searchParams.name"
+          placeholder="请输入名称"
+          allow-clear
+        />
       </a-form-item>
       <a-form-item label="简介" name="introduction">
         <a-input v-model:value="searchParams.introduction" placeholder="请输入简介" allow-clear />
@@ -52,7 +57,12 @@
         <a-input-number v-model:value="searchParams.picHeight" />
       </a-form-item>
       <a-form-item label="格式" name="picFormat">
-        <a-input style="max-width: 120px" v-model:value="searchParams.picFormat" placeholder="请输入格式" allow-clear />
+        <a-input
+          style="max-width: 120px"
+          v-model:value="searchParams.picFormat"
+          placeholder="请输入格式"
+          allow-clear
+        />
       </a-form-item>
       <a-form-item>
         <a-space>

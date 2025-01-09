@@ -30,39 +30,47 @@
               </template>
             </a-card-meta>
             <template v-if="showOp" #actions>
-              <a-space @click="(e) => doSearch(picture, e)">
-                <SearchOutlined />
-                搜索
-              </a-space>
-              <a-space @click="(e) => doEdit(picture, e)">
-                <EditOutlined />
-                编辑
-              </a-space>
+              <!-- 使用 Ant Design Vue 的 v-tooltip 指令添加鼠标悬停提示 -->
+              <a-tooltip title="分享">
+                <ShareAltOutlined @click="(e) => doShare(picture, e)" a-tooltip="" />
+              </a-tooltip>
+              <a-tooltip title="以图搜图">
+                <SearchOutlined @click="(e) => doSearch(picture, e)" />
+              </a-tooltip>
+              <a-tooltip title="编辑">
+                <EditOutlined @click="(e) => doEdit(picture, e)" />
+              </a-tooltip>
               <a-popconfirm
                 title="你确定删除吗？"
                 ok-text="是"
                 cancel-text="否"
                 @confirm="(e) => doDelete(picture, e)"
               >
-                <a-space @click="(e) => e.stopPropagation()">
-                  <DeleteOutlined />
-                  删除
-                </a-space>
+                <a-tooltip title="删除">
+                  <DeleteOutlined @click="(e) => e.stopPropagation()" />
+                </a-tooltip>
               </a-popconfirm>
             </template>
           </a-card>
         </a-list-item>
       </template>
     </a-list>
+    <ShareModal ref="shareModalRef" :link="shareLink" />
   </div>
 </template>
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router'
-import { defineProps, withDefaults } from 'vue'
-import { EditOutlined, DeleteOutlined, SearchOutlined } from '@ant-design/icons-vue'
-import {deletePictureUsingPost} from "@/api/pictureController";
-import {message} from "ant-design-vue";
+import { defineProps, ref, withDefaults } from 'vue'
+import {
+  DeleteOutlined,
+  EditOutlined,
+  SearchOutlined,
+  ShareAltOutlined,
+} from '@ant-design/icons-vue'
+import { deletePictureUsingPost } from '@/api/pictureController'
+import { message } from 'ant-design-vue'
+import ShareModal from '@/components/ShareModal.vue'
 
 interface Props {
   dataList?: API.PictureVO[]
@@ -76,7 +84,6 @@ const props = withDefaults(defineProps<Props>(), {
   loading: false,
   showOp: false,
 })
-
 
 const router = useRouter()
 const doClickPicture = (picture: API.PictureVO) => {
@@ -124,6 +131,18 @@ const doDelete = async (picture, e) => {
   }
 }
 
+// 分享操作
+const shareModalRef = ref()
+// 分享链接
+const shareLink = ref<string>()
+const doShare = (picture, e) => {
+  // 阻止事件冒泡
+  e.stopPropagation()
+  shareLink.value = `${window.location.protocol}//${window.location.host}/picture/${picture.id}`
+  if (shareModalRef.value) {
+    shareModalRef.value.openModal()
+  }
+}
 </script>
 
 <style scoped></style>

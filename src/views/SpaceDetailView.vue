@@ -7,7 +7,7 @@
         <a-tag color="blue">{{ SPACE_LEVEL_MAP[space.spaceLevel] }}</a-tag>
       </a-space>
       <a-space size="middle">
-        <a-button type="primary" :href="`/add_picture?spaceId=${id}`"> + 创建图片 </a-button>
+        <a-button type="primary" :href="`/add_picture?spaceId=${id}`"> + 创建图片</a-button>
         <a-tooltip
           :title="`占用空间 ${formatSize(space.totalSize)} / ${formatSize(space.maxSize)}`"
         >
@@ -22,6 +22,12 @@
     <div style="margin-bottom: 16px" />
     <!-- 搜索表单 -->
     <PictureSearchForm :onSearch="onSearch" />
+    <div style="margin-bottom: 16px" />
+
+    <!-- 按颜色搜索,独立的搜索条件 -->
+    <a-form-item label="按颜色搜索" style="margin-top: 16px">
+      <color-picker format="hex" @pureColorChange="onColorChange" />
+    </a-form-item>
     <!-- 图片列表 -->
     <PictureList :dataList="dataList" :loading="loading" :showOp="true" :onReload="fetchData" />
     <a-pagination
@@ -39,11 +45,16 @@
 import { getSpaceVoByIdUsingGet } from '@/api/spaceController'
 import { message } from 'ant-design-vue'
 import { SPACE_LEVEL_MAP } from '@/constants/space'
-import { defineProps, onMounted, reactive, ref } from 'vue'
+import { defineProps, onMounted, ref } from 'vue'
 import { formatSize } from '@/utils'
-import { listPictureVoByPageUsingPost } from '@/api/pictureController'
+import {
+  listPictureVoByPageUsingPost,
+  searchPictureByColorUsingPost,
+} from '@/api/pictureController'
 import PictureList from '@/components/PictureList.vue'
 import PictureSearchForm from '@/components/PictureSearchForm.vue'
+import { ColorPicker } from 'vue3-colorpicker'
+import 'vue3-colorpicker/style.css'
 
 const props = defineProps<{
   id: number
@@ -121,6 +132,25 @@ const onSearch = (newSearchParams: API.PictureQueryRequest) => {
   }
   fetchData()
 }
+
+// 颜色搜索
+const onColorChange = async (color: string) => {
+  loading.value = true
+  const res = await searchPictureByColorUsingPost({
+    picColor: color,
+    spaceId: props.id,
+  })
+  if (res.data.code === 0 && res.data.data) {
+    const data = res.data.data ?? []
+    dataList.value = data
+    total.value = data.length
+  } else {
+    message.error('获取数据失败，' + res.data.message)
+  }
+  loading.value = false
+}
+
+
 </script>
 
 <style scoped>
