@@ -33,7 +33,6 @@
             message="例如：涛的logo{序号} 或 {序号}动漫头像"
             type="info"
             show-icon
-            closable
           />
         </a-form-item>
         <a-form-item>

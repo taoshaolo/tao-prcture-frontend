@@ -18,7 +18,10 @@
     </a-tabs>
     <!-- 图片编辑 -->
     <div v-if="picture" class="edit-bar">
-      <a-button :icon="h(ScissorOutlined)" @click="doEditPicture">裁剪图片</a-button>
+      <a-space size="middle">
+        <a-button :icon="h(ScissorOutlined)" @click="doEditPicture">裁剪图片</a-button>
+        <a-button type="primary" :icon="h(FullscreenOutlined)" @click="doImagePainting">AI 扩图</a-button>
+      </a-space>
     </div>
     <!-- 图片信息表单 -->
     <a-form
@@ -69,6 +72,7 @@
       :spaceId="spaceId"
       :onSuccess="onCropSuccess"
     />
+    <ImageOutPainting ref="imageOutPaintingRef" :picture="picture" :spaceId="spaceId" :onSuccess="onImageOutPaintingSuccess" />
   </div>
 </template>
 
@@ -84,7 +88,8 @@ import {
 } from '@/api/pictureController'
 import { useRoute, useRouter } from 'vue-router'
 import ImageCropper from '@/components/ImageCropper.vue'
-import { ScissorOutlined } from '@ant-design/icons-vue'
+import { ScissorOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
+import ImageOutPainting from "@/components/ImageOutPainting.vue";
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
@@ -175,7 +180,8 @@ onMounted(() => {
   getOldPicture()
 })
 
-// 图片编辑器引用
+
+// ------ 图片编辑器引用 ------
 const imageCropperRef = ref()
 
 // 裁剪图片
@@ -185,6 +191,17 @@ const doEditPicture = async () => {
 
 // 裁剪成功事件
 const onCropSuccess = (newPicture: API.PictureVO) => {
+  picture.value = newPicture
+}
+
+// ------ AI 扩图引用 ------
+const imageOutPaintingRef = ref()
+// 打开 AI 扩图弹窗
+const doImagePainting = async () => {
+  imageOutPaintingRef.value?.openModal()
+}
+// AI 扩图成功事件
+const onImageOutPaintingSuccess = (newPicture: API.PictureVO) => {
   picture.value = newPicture
 }
 </script>
