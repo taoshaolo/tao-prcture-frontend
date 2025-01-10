@@ -16,6 +16,10 @@
         <UrlPictureUpload :picture="picture" :spaceId="spaceId" :onSuccess="onSuccess" />
       </a-tab-pane>
     </a-tabs>
+    <!-- 图片编辑 -->
+    <div v-if="picture" class="edit-bar">
+      <a-button :icon="h(ScissorOutlined)" @click="doEditPicture">裁剪图片</a-button>
+    </div>
     <!-- 图片信息表单 -->
     <a-form
       v-if="picture"
@@ -53,18 +57,25 @@
         />
       </a-form-item>
       <a-form-item>
-        <a-button type="primary" html-type="submit" :loading="loading" style="width: 100%"
-          >提交
+        <a-button type="primary" html-type="submit" :loading="loading" style="width: 100%">
+          提交
         </a-button>
       </a-form-item>
     </a-form>
+    <ImageCropper
+      ref="imageCropperRef"
+      :imageUrl="picture?.url"
+      :picture="picture"
+      :spaceId="spaceId"
+      :onSuccess="onCropSuccess"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import PictureUpload from '@/components/PictureUpload.vue'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
-import { computed, onMounted, reactive, ref } from 'vue'
+import { computed, onMounted, reactive, ref, h } from 'vue'
 import { message } from 'ant-design-vue'
 import {
   editPictureUsingPost,
@@ -72,6 +83,8 @@ import {
   listPictureTagCategoryUsingGet,
 } from '@/api/pictureController'
 import { useRoute, useRouter } from 'vue-router'
+import ImageCropper from '@/components/ImageCropper.vue'
+import { ScissorOutlined } from '@ant-design/icons-vue'
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
@@ -161,11 +174,29 @@ const getOldPicture = async () => {
 onMounted(() => {
   getOldPicture()
 })
+
+// 图片编辑器引用
+const imageCropperRef = ref()
+
+// 裁剪图片
+const doEditPicture = async () => {
+  imageCropperRef.value?.openModal()
+}
+
+// 裁剪成功事件
+const onCropSuccess = (newPicture: API.PictureVO) => {
+  picture.value = newPicture
+}
 </script>
 
 <style scoped>
 #addPictureView {
   max-width: 720px;
   margin: 0 auto;
+}
+
+#addPictureView .edit-bar {
+  text-align: center;
+  margin: 8px 0;
 }
 </style>
