@@ -27,7 +27,7 @@
               </a-space>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item key="user" @click="router.push('/user/center')">
+                  <a-menu-item key="user" @click="router.push('/my_center')">
                     <UserOutlined />
                     个人中心
                   </a-menu-item>
@@ -100,6 +100,11 @@ const originItems = [
     key: '/add_picture',
     label: '创建图片',
     title: '创建图片',
+  },
+  {
+    key: '/my_center',
+    label: '个人中心',
+    title: '个人中心',
   },
 ]
 

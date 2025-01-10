@@ -12,6 +12,7 @@ import AddSpaceView from '../views/AddSpaceView.vue'
 import MySpaceView from '../views/MySpaceView.vue'
 import SpaceDetailView from '../views/SpaceDetailView.vue'
 import SearchPictureView from '../views/SearchPictureView.vue'
+import MyCenterView from '../views/MyCenterView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -30,6 +31,11 @@ const router = createRouter({
       path: '/user/register',
       name: '用户注册',
       component: UserRegisterView,
+    },
+    {
+      path: '/my_center',
+      name: '用户注册',
+      component: MyCenterView,
     },
     {
       path: '/admin/userManage',

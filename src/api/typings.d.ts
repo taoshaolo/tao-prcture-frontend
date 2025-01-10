@@ -555,6 +555,7 @@ declare namespace API {
     editTime?: string
     id?: number
     isDelete?: number
+    sex?: number
     updateTime?: string
     userAccount?: string
     userAvatar?: string
@@ -579,11 +580,10 @@ declare namespace API {
   type UserQueryRequest = {
     current?: number
     id?: number
-    mpOpenId?: string
     pageSize?: number
+    sex?: number
     sortField?: string
     sortOrder?: string
-    unionId?: string
     userName?: string
     userProfile?: string
     userRole?: string
@@ -596,6 +596,7 @@ declare namespace API {
   }
 
   type UserUpdateMyRequest = {
+    sex?: number
     userAvatar?: string
     userName?: string
     userProfile?: string
@@ -603,6 +604,7 @@ declare namespace API {
 
   type UserUpdateRequest = {
     id?: number
+    sex?: number
     userAvatar?: string
     userName?: string
     userProfile?: string
@@ -612,6 +614,7 @@ declare namespace API {
   type UserVO = {
     createTime?: string
     id?: number
+    sex?: number
     userAvatar?: string
     userName?: string
     userProfile?: string
