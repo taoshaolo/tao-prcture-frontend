@@ -11,7 +11,6 @@
           分析全空间
         </a-button>
       </a-space>
-
     </a-flex>
     <div style="margin-bottom: 16px" />
     <!-- 搜索 -->
@@ -64,9 +63,7 @@
             <a-button type="link" :href="`/space_analyze?spaceId=${record.id}`" target="_blank">
               分析
             </a-button>
-            <a-button type="link" :href="`/add_space?id=${record.id}`">
-              编辑
-            </a-button>
+            <a-button type="link" :href="`/add_space?id=${record.id}`"> 编辑</a-button>
             <a-popconfirm
               title="你确定删除吗？"
               ok-text="是"

@@ -687,6 +687,7 @@ declare namespace API {
     sortField?: string
     sortOrder?: string
     userName?: string
+    userAccount?: string
     userProfile?: string
     userRole?: string
   }
@@ -717,6 +718,7 @@ declare namespace API {
     createTime?: string
     id?: number
     sex?: number
+    userAccount?: string
     userAvatar?: string
     userName?: string
     userProfile?: string
