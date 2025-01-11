@@ -101,11 +101,6 @@ const originItems = [
     label: '创建图片',
     title: '创建图片',
   },
-  {
-    key: '/my_center',
-    label: '个人中心',
-    title: '个人中心',
-  },
 ]
 
 // 过滤菜单项

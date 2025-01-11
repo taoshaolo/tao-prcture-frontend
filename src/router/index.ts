@@ -13,6 +13,7 @@ import MySpaceView from '../views/MySpaceView.vue'
 import SpaceDetailView from '../views/SpaceDetailView.vue'
 import SearchPictureView from '../views/SearchPictureView.vue'
 import MyCenterView from '../views/MyCenterView.vue'
+import SpaceAnalyzeView from '../views/SpaceAnalyzeView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -89,15 +90,12 @@ const router = createRouter({
       name: '我的空间',
       component: MySpaceView,
     },
-
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue'),
+      path: '/space_analyze',
+      name: '空间分析',
+      component: SpaceAnalyzeView,
     },
+
   ],
 })
 

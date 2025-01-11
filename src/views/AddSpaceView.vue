@@ -47,7 +47,7 @@ import {
 } from '@/api/spaceController'
 import { useRoute, useRouter } from 'vue-router'
 import { SPACE_LEVEL_OPTIONS } from '@/constants/space'
-import { formatSize } from '@/utils/index'
+import { formatSize } from '@/utils'
 
 const space = ref<API.SpaceVO>()
 const spaceForm = reactive<API.SpaceAddRequest | API.SpaceEditRequest>({})
