@@ -19,7 +19,7 @@
 
 <script lang="ts" setup>
 import { h, ref } from 'vue'
-import { PictureOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { PictureOutlined, CloudOutlined } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 
@@ -35,7 +35,7 @@ const menuItems = [
   {
     key: '/my_space',
     label: '我的空间',
-    icon: () => h(UserOutlined),
+    icon: () => h(CloudOutlined),
   },
 ]
 

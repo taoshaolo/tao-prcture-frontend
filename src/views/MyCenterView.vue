@@ -117,6 +117,10 @@ const handleSubmit = async () => {
     })
     if (res.data.code === 0 && res.data.data) {
       message.success('修改成功')
+      // 更新存储中的用户信息
+      loginUserStore.setLoginUser({
+        ...userForm,
+      })
       componentDisabled.value = true // 关闭编辑
       isEditing.value = false // 设置为非编辑状态
     } else {

@@ -78,7 +78,7 @@ import 'vue3-colorpicker/style.css'
 import BatchEditPictureModal from '@/components/BatchEditPictureModal.vue'
 
 const props = defineProps<{
-  id: number
+  id: number | string
 }>()
 const space = ref<API.SpaceVO>({})
 

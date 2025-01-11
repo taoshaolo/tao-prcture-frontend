@@ -10,12 +10,21 @@
         </router-link>
       </a-col>
       <a-col flex="auto">
-        <a-menu
-          v-model:selectedKeys="current"
-          mode="horizontal"
-          :items="items"
-          @click="doMenuClick"
-        />
+        <a-menu mode="horizontal" :selected-keys="selectedKeys" @click="doMenuClick">
+          <template v-for="item in visibleRoutes">
+            <a-menu-item v-if="!item.children" :key="item.path">
+              <router-link :to="item.path">{{ item.name }}</router-link>
+            </a-menu-item>
+            <a-sub-menu v-else :key="item.path">
+              <template #title>{{ item.name }}</template>
+              <a-menu-item v-for="child in item.children" :key="child.path">
+                <router-link :to="{ path: `${item.path}/${child.path}` }">
+                  {{ child.name }}
+                </router-link>
+              </a-menu-item>
+            </a-sub-menu>
+          </template>
+        </a-menu>
       </a-col>
       <a-col flex="120px">
         <div class="user-login-status">
@@ -33,7 +42,7 @@
                   </a-menu-item>
                   <a-menu-item>
                     <router-link to="/my_space">
-                      <UserOutlined />
+                      <CloudOutlined />
                       我的空间
                     </router-link>
                   </a-menu-item>
@@ -56,72 +65,40 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, h, ref } from 'vue'
-import { HomeOutlined, LogoutOutlined, UserOutlined } from '@ant-design/icons-vue'
-import { MenuProps, message } from 'ant-design-vue'
+import { computed, ref } from 'vue'
+import { LogoutOutlined, CloudOutlined, UserOutlined } from '@ant-design/icons-vue'
+import { message } from 'ant-design-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { userLogoutUsingPost } from '@/api/userController'
+import checkAccess from '@/access/checkAccess'
+import { routes } from '@/router/routes'
 
 const loginUserStore = useLoginUserStore()
 
-// 当前路由选中状态
-const current = ref<string[]>(['home'])
+const router = useRouter()
 
-// 未经过滤的菜单项
-const originItems = [
-  {
-    key: '/',
-    icon: () => h(HomeOutlined),
-    label: '主页',
-    title: '主页',
-  },
-  {
-    key: '/admin/userManage',
-    label: '用户管理',
-    title: '用户管理',
-  },
-  {
-    key: '/admin/pictureManage',
-    label: '图片管理',
-    title: '图片管理',
-  },
-  {
-    key: '/admin/spaceManage',
-    label: '空间管理',
-    title: '空间管理',
-  },
-  {
-    key: '/add_space',
-    label: '创建空间',
-    title: '创建空间',
-  },
-  {
-    key: '/add_picture',
-    label: '创建图片',
-    title: '创建图片',
-  },
-]
+// 当前选中的菜单项
+const selectedKeys = ref(['/'])
+// 路由跳转时，字段更新选中的菜单项
+router.afterEach((to, from, failure) => {
+  selectedKeys.value = [to.path]
+})
 
-// 过滤菜单项
-const filterMenus = (menus = [] as MenuProps['items']) => {
-  return menus?.filter((menu) => {
-    if (menu.key.startsWith('/admin')) {
-      const loginUser = loginUserStore.loginUser
-      if (!loginUser || loginUser.userRole !== 'admin') {
-        return false
-      }
+// 展示在菜单栏的路由数组
+const visibleRoutes = computed(() => {
+  return routes.filter((item) => {
+    if (item.meta?.hideInMenu) {
+      return false
+    }
+    // 根据权限过滤菜单
+    if (!checkAccess(loginUserStore.loginUser, item.meta?.access as string)) {
+      return false
     }
     return true
   })
-}
-
-// 展示在菜单的路由数组
-const items = computed(() => {
-  return filterMenus(originItems)
 })
 
-const router = useRouter()
 // 路由跳转事件
 const doMenuClick = ({ key }) => {
   router.push({
@@ -144,11 +121,6 @@ const doLogout = async () => {
     message.error('退出失败，' + res.data.message)
   }
 }
-
-// 路由跳转后，更新菜单选中状态
-router.afterEach((to, from, next) => {
-  current.value = [to.path]
-})
 </script>
 
 <style scoped>
