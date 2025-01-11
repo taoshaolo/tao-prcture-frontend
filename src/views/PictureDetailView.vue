@@ -176,6 +176,13 @@ const doEdit = () => {
 
 // 处理下载
 const doDownload = () => {
+  // 检查用户是否登录
+  const loginUser = loginUserStore.loginUser
+  if (!loginUser?.id) {
+    message.warn('请先登录')
+    router.replace('/user/login')
+    return
+  }
   downloadImage(picture.value.url)
 }
 
