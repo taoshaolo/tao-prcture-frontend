@@ -183,7 +183,7 @@ const doDownload = () => {
     router.replace('/user/login')
     return
   }
-  downloadImage(picture.value.url)
+  downloadImage(picture.value.originalUrl)
 }
 
 // 分享操作

@@ -371,6 +371,7 @@ declare namespace API {
     introduction?: string
     isDelete?: number
     name?: string
+    originalUrl?: string
     picColor?: string
     picFormat?: string
     picHeight?: number
@@ -476,6 +477,7 @@ declare namespace API {
     id?: number
     introduction?: string
     name?: string
+    originalUrl?: string
     picColor?: string
     picFormat?: string
     picHeight?: number
@@ -686,8 +688,8 @@ declare namespace API {
     sex?: number
     sortField?: string
     sortOrder?: string
-    userName?: string
     userAccount?: string
+    userName?: string
     userProfile?: string
     userRole?: string
   }
