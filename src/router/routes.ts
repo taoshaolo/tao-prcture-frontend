@@ -17,6 +17,7 @@ import SpaceDetailView from '@/views/SpaceDetailView.vue'
 import SearchPictureView from '@/views/SearchPictureView.vue'
 import MySpaceView from '@/views/MySpaceView.vue'
 import SpaceAnalyzeView from '@/views/SpaceAnalyzeView.vue'
+import SpaceUserManageView from '@/views/admin/SpaceUserManageView.vue'
 import ACCESS_ENUM from "@/access/accessEnum";
 
 export const routes: Array<RouteRecordRaw> = [
@@ -108,13 +109,24 @@ export const routes: Array<RouteRecordRaw> = [
     ]
   },
   {
+    path: '/spaceUserManage/:id',
+    name: '空间成员管理',
+    component: SpaceUserManageView,
+    props: true,
+    meta: {
+      hideInMenu: true,
+      access: ACCESS_ENUM.USER,
+    },
+  },
+
+  {
     path: '/picture/:id',
     name: '图片详情',
     component: PictureDetailView,
     props: true,
     meta: {
       hideInMenu: true,
-      access: ACCESS_ENUM.USER,
+      access: ACCESS_ENUM.NOT_LOGIN,
     },
   },
   {

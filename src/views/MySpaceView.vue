@@ -10,6 +10,7 @@ import { useRouter } from 'vue-router'
 import { listSpaceVoByPageUsingPost } from '@/api/spaceController'
 import { message } from 'ant-design-vue'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
+import {SPACE_TYPE_ENUM} from "@/constants/space";
 
 const router = useRouter()
 const loginUserStore = useLoginUserStore()
@@ -25,6 +26,7 @@ const checkUserSpace = async () => {
   // 获取用户空间信息
   const res = await listSpaceVoByPageUsingPost({
     userId: loginUser.id,
+    spaceType: SPACE_TYPE_ENUM.PRIVATE,
     current: 1,
     pageSize: 1,
   })

@@ -37,10 +37,11 @@
               <a-tooltip title="以图搜图">
                 <SearchOutlined @click="(e) => doSearch(picture, e)" />
               </a-tooltip>
-              <a-tooltip title="编辑">
+              <a-tooltip title="编辑" v-if="canEdit">
                 <EditOutlined @click="(e) => doEdit(picture, e)" />
               </a-tooltip>
               <a-popconfirm
+                v-if="canDelete"
                 title="你确定删除吗？"
                 ok-text="是"
                 cancel-text="否"
@@ -76,6 +77,8 @@ interface Props {
   dataList?: API.PictureVO[]
   loading?: boolean
   showOp?: boolean
+  canDelete?: boolean
+  canEdit?: boolean
   onReload?: () => void
 }
 
@@ -83,6 +86,8 @@ const props = withDefaults(defineProps<Props>(), {
   dataList: () => [],
   loading: false,
   showOp: false,
+  canDelete: false,
+  canEdit: false,
 })
 
 const router = useRouter()

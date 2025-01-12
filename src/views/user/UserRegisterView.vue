@@ -3,7 +3,13 @@
     <h2 class="title">涛少云图库 - 用户注册</h2>
     <div class="desc">免费获取海量图片</div>
     <a-form class="form" :model="formState" name="basic" @finish="handleSubmit">
-      <a-form-item name="userAccount" :rules="[{ required: true, message: '请输入账号' }]">
+      <a-form-item
+        name="userAccount"
+        :rules="[
+          { required: true, message: '请输入账号' },
+          { min: 4, message: '账号长度不能小于4位' },
+          { pattern: /^[A-Za-z0-9]+$/, message: '账号只能包含数字和字母' },
+          ]">
         <a-input v-model:value="formState.userAccount" placeholder="请输入账号" />
       </a-form-item>
 

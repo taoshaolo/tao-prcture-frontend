@@ -45,7 +45,7 @@ import { Vue3Marquee } from 'vue3-marquee'
 #basicLayout .content {
   background: linear-gradient(to right, #fefefe, #fff);
   margin-bottom: 28px;
-  padding: 28px;
+  padding: 8px 16px;
 }
 
 #basicLayout .footer {
@@ -62,13 +62,8 @@ import { Vue3Marquee } from 'vue3-marquee'
   margin-bottom: 1px;
 }
 
-#basicLayout .content {
-  padding: 16px;
-}
-
 #basicLayout .sider {
   background: #fff;
-  padding-top: 16px;
   border-right: 0.5px solid #eee;
 }
 
