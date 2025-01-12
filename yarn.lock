@@ -2984,7 +2984,7 @@ vue-types@^4.1.0:
   dependencies:
     is-plain-object "5.0.0"
 
-"vue@^2.0.0 || ^3.0.0", "vue@^2.7.0 || ^3.1.1", "vue@^2.7.0 || ^3.5.11", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.2.0, vue@^3.2.25, vue@^3.2.6, vue@^3.4.0, vue@^3.5.13, vue@>=3.0.3, vue@>=3.2.0, vue@3.5.13:
+"vue@^2.0.0 || ^3.0.0", "vue@^2.7.0 || ^3.1.1", "vue@^2.7.0 || ^3.5.11", vue@^3.0.0, "vue@^3.0.0-0 || ^2.6.0", vue@^3.2, vue@^3.2.0, vue@^3.2.25, vue@^3.2.6, vue@^3.4.0, vue@^3.5.13, vue@>=3.0.3, vue@>=3.2.0, vue@3.5.13:
   version "3.5.13"
   resolved "https://registry.npmmirror.com/vue/-/vue-3.5.13.tgz"
   integrity sha512-wmeiSMxkZCSc+PM2w2VRsOYAZC8GdipNFRTsLSfodVqI9mbejKeXEGr8SckuLnrQPGe3oJN5c3K0vpoU9q/wCQ==
@@ -3007,6 +3007,11 @@ vue3-colorpicker@^2.3.0:
     lodash-es "^4.17.21"
     tinycolor2 "^1.4.2"
     vue-types "^4.1.0"
+
+vue3-marquee@^4.2.2:
+  version "4.2.2"
+  resolved "https://registry.npmmirror.com/vue3-marquee/-/vue3-marquee-4.2.2.tgz"
+  integrity sha512-FeFvGUVInKfFilXFcnl8sDRBJBZCZSNLlQDquJErB9db6W2xICRVqbRV/jtdzsEP0rftarLQhx9MeEAU0+TPuQ==
 
 warning@^4.0.0:
   version "4.0.3"

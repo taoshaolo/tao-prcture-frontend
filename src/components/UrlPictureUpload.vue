@@ -6,8 +6,8 @@
         style="width: calc(100% - 120px)"
         placeholder="请输入图片 URL"
       />
-      <a-button type="primary" :loading="loading" @click="handleUpload" style="width: 120px"
-        >提交
+      <a-button type="primary" :loading="loading" @click="handleUpload" style="width: 120px">
+        提交
       </a-button>
     </a-input-group>
     <div class="img-wrapper">
@@ -16,11 +16,9 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { defineProps, ref, withDefaults } from 'vue'
-import { LoadingOutlined, PlusOutlined } from '@ant-design/icons-vue'
-import type { UploadProps } from 'ant-design-vue'
+import { defineProps, ref } from 'vue'
 import { message } from 'ant-design-vue'
-import { uploadPictureByUrlUsingPost, uploadPictureUsingPost } from '@/api/pictureController'
+import { uploadPictureByUrlUsingPost } from '@/api/pictureController'
 
 interface Props {
   picture?: API.PictureVO
