@@ -28,8 +28,10 @@
           </div>
         </a-upload>
         <div style="margin-top: 16px" />
-        <a-form-item name="id" label="用户id">
-          <a-input v-model:value="userForm.id" disabled />
+        <a-form-item name="id" label="用户id" style="text-align: left">
+          <a-typography-paragraph :copyable="{ text: userForm.id }">
+            {{ userForm.id }}
+          </a-typography-paragraph>
         </a-form-item>
         <a-form-item name="sex" label="性别">
           <a-select v-model:value="userForm.sex" :options="sexOptions" style="text-align: left" />
@@ -40,11 +42,11 @@
         <a-form-item name="userProfile" label="简介">
           <a-textarea v-model:value="userForm.userProfile" />
         </a-form-item>
-        <a-form-item name="userRole" label="用户角色">
-          <a-input v-model:value="userForm.userRole" disabled />
+        <a-form-item name="userRole" label="用户角色" style="text-align: left">
+          {{ userForm.userRole }}
         </a-form-item>
-        <a-form-item name="createTime" label="创建时间">
-          <a-input v-model:value="userForm.createTime" style="text-align: left" disabled />
+        <a-form-item name="createTime" label="创建时间" style="text-align: left">
+          {{ dayjs(userForm.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </a-form-item>
       </a-form>
       <a-space>
@@ -185,5 +187,9 @@ const beforeUpload = (file: UploadProps['fileList'][number]) => {
 #myCenterView .userAvatar {
   width: 100%;
   border-radius: 5px;
+}
+
+div:where(.css-dev-only-do-not-override-1p3hq3p).ant-typography, :where(.css-dev-only-do-not-override-1p3hq3p).ant-typography p{
+  margin-bottom: 0 !important;
 }
 </style>
