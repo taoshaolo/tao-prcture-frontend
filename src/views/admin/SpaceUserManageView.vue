@@ -18,7 +18,7 @@
     <a-table :columns="columns" :data-source="dataList">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'userInfo'">
-          <a-space>
+          <a-space @click="goToUserDetail(record.user?.id)">
             <a-avatar :src="record.user?.userAvatar" />
             {{ record.user?.userName }}
           </a-space>
@@ -54,6 +54,7 @@ import {
   editSpaceUserUsingPost,
   listSpaceUserUsingPost,
 } from '@/api/spaceUserController'
+import { useRouter } from 'vue-router'
 
 // 表格列
 const columns = [
@@ -151,5 +152,14 @@ const handleSubmit = async () => {
   } else {
     message.error('添加失败，' + res.data.message)
   }
+}
+
+const router = useRouter()
+
+// 跳转到用户详情页
+const goToUserDetail = (id: string) => {
+  router.push({
+    path: `/personal_center/${id}`,
+  })
 }
 </script>

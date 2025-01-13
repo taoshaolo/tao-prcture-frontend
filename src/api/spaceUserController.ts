@@ -62,6 +62,21 @@ export async function getSpaceUserUsingPost(
   })
 }
 
+/** getSpaceUserVO POST /api/spaceUser/get/vo */
+export async function getSpaceUserVoUsingPost(
+  body: API.SpaceUserQueryRequest,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseSpaceUserVO_>('/api/spaceUser/get/vo', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    data: body,
+    ...(options || {}),
+  })
+}
+
 /** listSpaceUser POST /api/spaceUser/list */
 export async function listSpaceUserUsingPost(
   body: API.SpaceUserQueryRequest,

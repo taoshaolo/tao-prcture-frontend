@@ -196,6 +196,7 @@ const columns = [
   {
     title: '审核信息',
     dataIndex: 'reviewMessage',
+    width: 130,
   },
   {
     title: '创建时间',

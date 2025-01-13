@@ -30,7 +30,7 @@
           :icon="h(TeamOutlined)"
           :href="`/spaceUserManage/${id}`"
         >
-          成员管理
+          成员信息
         </a-button>
 
         <a-button

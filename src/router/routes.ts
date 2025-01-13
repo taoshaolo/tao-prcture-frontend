@@ -5,7 +5,7 @@ import NoAuthView from '@/views/NoAuthView.vue'
 import UserLoginView from '@/views/user/UserLoginView.vue'
 import UserRegisterView from '@/views/user/UserRegisterView.vue'
 
-import MyCenterView from '@/views/MyCenterView.vue'
+import PersonalCenterView from '@/views/PersonalCenterView.vue'
 import UserManageView from '@/views/admin/UserManageView.vue'
 import AddPictureView from '@/views/AddPictureView.vue'
 import AddSpaceView from '@/views/AddSpaceView.vue'
@@ -43,9 +43,9 @@ export const routes: Array<RouteRecordRaw> = [
     },
   },
   {
-    path: '/my_center',
+    path: '/personal_center/:id',
     name: '个人中心',
-    component: MyCenterView,
+    component: PersonalCenterView,
     meta: {
       hideInMenu: true,
     },

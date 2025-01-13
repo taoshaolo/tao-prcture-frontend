@@ -1,7 +1,7 @@
 <template>
   <div class="globalHeader">
     <a-row :wrap="false">
-      <a-col flex="200px">
+      <a-col flex="240px">
         <router-link to="/">
           <div class="title-bar">
             <img class="logo" src="~@/assets/logo.png" alt="logo" />
@@ -36,7 +36,7 @@
               </a-space>
               <template #overlay>
                 <a-menu>
-                  <a-menu-item key="user" @click="router.push('/my_center')">
+                  <a-menu-item key="user" @click="router.push(`/personal_center/${loginUserStore.loginUser.id}`)">
                     <UserOutlined />
                     个人中心
                   </a-menu-item>

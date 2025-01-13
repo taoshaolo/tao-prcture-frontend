@@ -55,11 +55,24 @@
       <template #bodyCell="{ column, record }">
         <!-- 空间级别 -->
         <template v-if="column.dataIndex === 'spaceLevel'">
-          <a-tag>{{ SPACE_LEVEL_MAP[record.spaceLevel] }}</a-tag>
+          <div v-if="record.spaceLevel === 0">
+            <a-tag>普通版</a-tag>
+          </div>
+          <div v-else-if="record.spaceLevel === 1">
+            <a-tag color="blue">专业版</a-tag>
+          </div>
+          <div v-else-if="record.spaceLevel === 2">
+            <a-tag color="pink">旗舰版</a-tag>
+          </div>
         </template>
         <!-- 空间类别 -->
         <template v-if="column.dataIndex === 'spaceType'">
-          <a-tag>{{ SPACE_TYPE_MAP[record.spaceType] }}</a-tag>
+          <div v-if="record.spaceType === 0">
+            <a-tag color="green">私有空间</a-tag>
+          </div>
+          <div v-else-if="record.spaceType === 1">
+            <a-tag color="purple">团队空间</a-tag>
+          </div>
         </template>
         <!-- 使用情况 -->
         <template v-if="column.dataIndex === 'spaceUseInfo'">
@@ -99,7 +112,8 @@ import { deleteSpaceUsingPost, listSpaceByPageUsingPost } from '@/api/spaceContr
 import { message } from 'ant-design-vue'
 import { formatSize } from '@/utils'
 import dayjs from 'dayjs'
-import { SPACE_TYPE_OPTIONS, SPACE_LEVEL_MAP, SPACE_LEVEL_OPTIONS, SPACE_TYPE_MAP } from '@/constants/space'
+import { SPACE_LEVEL_OPTIONS, SPACE_TYPE_OPTIONS } from '@/constants/space'
+import { listPictureTagCategoryUsingGet } from '@/api/pictureController'
 
 const columns = [
   {
@@ -213,7 +227,7 @@ const categoryOptions = ref<string[]>([])
 const tagOptions = ref<string[]>([])
 
 const getTagCategoryOptions = async () => {
-  const res = await listSpaceTagCategoryUsingGet()
+  const res = await listPictureTagCategoryUsingGet()
   if (res.data.code === 0 && res.data.data) {
     categoryOptions.value = (res.data.data.categoryList ?? []).map((data: string) => {
       return {
@@ -235,21 +249,4 @@ const getTagCategoryOptions = async () => {
 onMounted(() => {
   getTagCategoryOptions()
 })
-
-const handleReview = async (record: API.Space, reviewStatus: number) => {
-  const reviewMessage =
-    reviewStatus === PIC_REVIEW_STATUS_ENUM.PASS ? '管理员操作通过' : '管理员操作拒绝'
-  const res = await doSpaceReviewUsingPost({
-    id: record.id,
-    reviewStatus,
-    reviewMessage,
-  })
-  if (res.data.code === 0) {
-    message.success('审核操作成功')
-    // 重新获取列表
-    fetchData()
-  } else {
-    message.error('审核操作失败，' + res.data.message)
-  }
-}
 </script>

@@ -167,6 +167,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseSpaceUserVO_ = {
+    code?: number
+    data?: SpaceUserVO
+    message?: string
+  }
+
   type BaseResponseSpaceVO_ = {
     code?: number
     data?: SpaceVO

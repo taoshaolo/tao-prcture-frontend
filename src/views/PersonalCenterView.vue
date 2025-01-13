@@ -1,5 +1,5 @@
 <template>
-  <div id="myCenterView">
+  <div id="personalCenterView">
     <h2>个人中心</h2>
     <a-card class="myCenterCard">
       <a-form
@@ -10,7 +10,6 @@
         :model="userForm"
         style="max-width: 600px"
       >
-        <!--        <a-avatar :size="72" :src="userForm.userAvatar" alt="头像" />-->
         <a-upload
           name="avatar"
           list-type="picture-card"
@@ -50,7 +49,7 @@
         </a-form-item>
       </a-form>
       <a-space>
-        <a-button type="primary" ghost @click="handleSubmit" :icon="h(EditOutlined)">编辑</a-button>
+        <a-button type="primary" v-if="canEdit" ghost @click="handleSubmit" :icon="h(EditOutlined)">编辑</a-button>
         <a-button type="default" v-if="isEditing" @click="handleCancel" :icon="h(CloseOutlined)"
           >取消
         </a-button>
@@ -59,13 +58,14 @@
   </div>
 </template>
 <script lang="ts" setup>
-import { h, onMounted, reactive, ref } from 'vue'
+import {h, onMounted, reactive, ref, defineProps, computed} from 'vue'
 import { EditOutlined, CloseOutlined } from '@ant-design/icons-vue'
 import { getUserVoByIdUsingGet, updateMyUserUsingPost } from '@/api/userController'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
 import { message, UploadProps } from 'ant-design-vue'
 import { uploadFileUsingPost } from '@/api/fileController'
 import dayjs from 'dayjs'
+import {useRoute} from "vue-router";
 
 const componentDisabled = ref(true)
 const labelCol = { style: { width: '150px' } }
@@ -81,10 +81,13 @@ const sexOptions = ref([
 const isEditing = ref(false) // 新增状态变量用于跟踪是否处于编辑状态
 const loginUserStore = useLoginUserStore()
 
+const route = useRoute();
+
 const getOldUserInfo = async () => {
   const res = await getUserVoByIdUsingGet({
-    id: loginUserStore.loginUser.id,
+    id: route.params.id,
   })
+
   if (res.data.code === 0 && res.data.data) {
     userForm.id = res.data.data.id
     userForm.userName = res.data.data.userName
@@ -93,6 +96,8 @@ const getOldUserInfo = async () => {
     userForm.userRole = res.data.data.userRole
     userForm.createTime = res.data.data.createTime
     userForm.sex = res.data.data.sex
+  } else {
+    message.error('获取用户信息失败')
   }
 }
 
@@ -106,6 +111,11 @@ const handleCancel = () => {
   componentDisabled.value = true
   isEditing.value = false
 }
+
+// 是否有权限编辑
+const canEdit = computed(() => {
+  return loginUserStore.loginUser?.id === userForm.id;
+});
 
 const handleSubmit = async () => {
   if (!isEditing.value) {
@@ -176,15 +186,18 @@ const beforeUpload = (file: UploadProps['fileList'][number]) => {
   }
   return isJpgOrPng && isLt2M
 }
+
+
 </script>
 
 <style scoped>
-#myCenterView .myCenterCard {
+#personalCenterView .myCenterCard {
   max-width: 600px;
   text-align: center;
+  margin: 0 auto;
 }
 
-#myCenterView .userAvatar {
+#personalCenterView .userAvatar {
   width: 100%;
   border-radius: 5px;
 }

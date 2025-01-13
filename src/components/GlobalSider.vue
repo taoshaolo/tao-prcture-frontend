@@ -113,4 +113,11 @@ const doMenuClick = ({ key }: { key: string }) => {
 #globalSider .ant-layout-sider {
   background: none;
 }
-</style>
+
+/* 覆盖 Ant Design 菜单项样式 */
+::v-deep .ant-menu-item .ant-menu-title-content {
+  white-space: normal !important; /* 允许文本换行 */
+  word-break: break-word !important; /* 必要时断词 */
+  height: auto !important; /* 自动调整高度以适应多行文本 */
+  line-height: 1.5 !important; /* 行高调整 */
+}</style>
