@@ -1,6 +1,6 @@
 <template>
   <div id="userLoginView">
-    <h2 class="title">涛少云图库 - 用户登录</h2>
+    <h2 class="title">涛-智能协同云图库 - 用户登录</h2>
     <div class="desc">免费获取海量图片</div>
     <a-form :model="formState" name="basic" @finish="handleSubmit">
       <a-form-item

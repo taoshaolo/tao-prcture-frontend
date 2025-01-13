@@ -20,7 +20,9 @@
     <div v-if="picture" class="edit-bar">
       <a-space size="middle">
         <a-button :icon="h(ScissorOutlined)" @click="doEditPicture">裁剪图片</a-button>
-        <a-button type="primary" :icon="h(FullscreenOutlined)" @click="doImagePainting">AI 扩图</a-button>
+        <a-button type="primary" :icon="h(FullscreenOutlined)" @click="doImagePainting"
+          >AI 扩图</a-button
+        >
       </a-space>
     </div>
     <!-- 图片信息表单 -->
@@ -70,16 +72,22 @@
       :imageUrl="picture?.url"
       :picture="picture"
       :spaceId="spaceId"
+      :space="space"
       :onSuccess="onCropSuccess"
     />
-    <ImageOutPainting ref="imageOutPaintingRef" :picture="picture" :spaceId="spaceId" :onSuccess="onImageOutPaintingSuccess" />
+    <ImageOutPainting
+      ref="imageOutPaintingRef"
+      :picture="picture"
+      :spaceId="spaceId"
+      :onSuccess="onImageOutPaintingSuccess"
+    />
   </div>
 </template>
 
 <script setup lang="ts">
 import PictureUpload from '@/components/PictureUpload.vue'
 import UrlPictureUpload from '@/components/UrlPictureUpload.vue'
-import { computed, onMounted, reactive, ref, h } from 'vue'
+import { computed, onMounted, reactive, ref, h, watchEffect } from 'vue'
 import { message } from 'ant-design-vue'
 import {
   editPictureUsingPost,
@@ -89,7 +97,8 @@ import {
 import { useRoute, useRouter } from 'vue-router'
 import ImageCropper from '@/components/ImageCropper.vue'
 import { ScissorOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
-import ImageOutPainting from "@/components/ImageOutPainting.vue";
+import ImageOutPainting from '@/components/ImageOutPainting.vue'
+import { getSpaceVoByIdUsingGet } from '@/api/spaceController'
 
 const picture = ref<API.PictureVO>()
 const pictureForm = reactive<API.PictureEditRequest>({})
@@ -180,7 +189,6 @@ onMounted(() => {
   getOldPicture()
 })
 
-
 // ------ 图片编辑器引用 ------
 const imageCropperRef = ref()
 
@@ -204,6 +212,26 @@ const doImagePainting = async () => {
 const onImageOutPaintingSuccess = (newPicture: API.PictureVO) => {
   picture.value = newPicture
 }
+
+// 获取空间信息
+const space = ref<API.SpaceVO>()
+
+// 获取空间信息
+const fetchSpace = async () => {
+  // 获取数据
+  if (spaceId.value) {
+    const res = await getSpaceVoByIdUsingGet({
+      id: spaceId.value,
+    })
+    if (res.data.code === 0 && res.data.data) {
+      space.value = res.data.data
+    }
+  }
+}
+
+watchEffect(() => {
+  fetchSpace()
+})
 </script>
 
 <style scoped>

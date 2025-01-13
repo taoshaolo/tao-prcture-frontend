@@ -5,7 +5,7 @@
         <router-link to="/">
           <div class="title-bar">
             <img class="logo" src="~@/assets/logo.png" alt="logo" />
-            <div class="title">涛少云图库</div>
+            <div class="title">涛-智能协同云图库</div>
           </div>
         </router-link>
       </a-col>
