@@ -17,10 +17,11 @@
     <a-table :columns="dynamicColumns" :data-source="dataList">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'userInfo'">
-          <a @click="goToUserDetail(record.user?.id)">
+          <a @click="goToUserDetail(record.user?.id)" style="color: black">
             <a-space>
               <a-avatar :src="record.user?.userAvatar" />
               {{ record.user?.userName }}
+              <a-tag color="blue" v-if="loginUser.id === record.user?.id">我</a-tag>
             </a-space>
           </a>
         </template>
@@ -74,6 +75,7 @@ import {
   listSpaceUserUsingPost,
 } from '@/api/spaceUserController'
 import { useRouter } from 'vue-router'
+import {useLoginUserStore} from "@/stores/useLoginUserStore";
 
 // 表格列
 const columns = [
@@ -109,6 +111,8 @@ interface Props {
 }
 
 const props = defineProps<Props>()
+
+const loginUser = useLoginUserStore().loginUser
 
 // 数据
 const dataList = ref([])

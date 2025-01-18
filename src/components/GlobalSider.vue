@@ -22,8 +22,8 @@ import {computed, h, ref, watchEffect} from 'vue'
 import { PictureOutlined, CloudOutlined, TeamOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { useRouter } from 'vue-router'
 import { useLoginUserStore } from '@/stores/useLoginUserStore'
-import {SPACE_TYPE_ENUM} from "@/constants/space";
-import {message} from "ant-design-vue";
+import {SPACE_ROLE_MAP, SPACE_TYPE_ENUM} from "@/constants/space";
+import {message, Tag} from "ant-design-vue";
 import {listMyTeamSpaceUsingPost} from "@/api/spaceUserController";
 
 const loginUserStore = useLoginUserStore()
@@ -59,9 +59,12 @@ const menuItems = computed(() => {
   // 展示团队空间分组
   const teamSpaceSubMenus = teamSpaceList.value.map((spaceUser) => {
     const space = spaceUser.space
+    let roleTag = h(Tag, { style: { color: 'purple' }}, () => SPACE_ROLE_MAP[spaceUser.spaceRole]);
+
     return {
       key: '/space/' + spaceUser.spaceId,
-      label: space?.spaceName,
+      label: h('div', [space?.spaceName, ' ', roleTag]),
+      // label: space?.spaceName + ' ' + (spaceUser.spaceRole === 'admin' ? '(我的)' : ''),
     }
   })
   const teamSpaceMenuGroup = {
@@ -114,10 +117,13 @@ const doMenuClick = ({ key }: { key: string }) => {
   background: none;
 }
 
+:deep ul.ant-menu-item-group-list li {
+  height: 48px !important;
+}
+
 /* 覆盖 Ant Design 菜单项样式 */
-::v-deep .ant-menu-item .ant-menu-title-content {
+:deep .ant-menu-item .ant-menu-title-content {
   white-space: normal !important; /* 允许文本换行 */
   word-break: break-word !important; /* 必要时断词 */
-  height: auto !important; /* 自动调整高度以适应多行文本 */
   line-height: 1.5 !important; /* 行高调整 */
 }</style>

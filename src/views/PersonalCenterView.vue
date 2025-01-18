@@ -32,6 +32,9 @@
             {{ userForm.id }}
           </a-typography-paragraph>
         </a-form-item>
+        <a-form-item name="userAccount" label="账号" style="text-align: left">
+            {{ userForm.userAccount }}
+        </a-form-item>
         <a-form-item name="sex" label="性别">
           <a-select v-model:value="userForm.sex" :options="sexOptions" style="text-align: left" />
         </a-form-item>
@@ -91,6 +94,7 @@ const getOldUserInfo = async () => {
   if (res.data.code === 0 && res.data.data) {
     userForm.id = res.data.data.id
     userForm.userName = res.data.data.userName
+    userForm.userAccount = res.data.data.userAccount
     userForm.userAvatar = res.data.data.userAvatar
     userForm.userProfile = res.data.data.userProfile
     userForm.userRole = res.data.data.userRole
