@@ -24,9 +24,10 @@
           批量编辑
         </a-button>
         <a-button
-          v-if="canManageSpaceUser"
+          v-if="canViewerPicture"
           type="primary"
           ghost
+          :space="space"
           :icon="h(TeamOutlined)"
           :href="`/spaceUserManage/${id}`"
         >
@@ -124,6 +125,7 @@ const canManageSpaceUser = createPermissionChecker(SPACE_PERMISSION_ENUM.SPACE_U
 const canUploadPicture = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_UPLOAD)
 const canEditPicture = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_EDIT)
 const canDeletePicture = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_DELETE)
+const canViewerPicture = createPermissionChecker(SPACE_PERMISSION_ENUM.PICTURE_VIEW)
 
 // 获取空间详情
 const fetchSpaceDetail = async () => {

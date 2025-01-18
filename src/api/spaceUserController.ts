@@ -99,3 +99,18 @@ export async function listMyTeamSpaceUsingPost(options?: { [key: string]: any })
     ...(options || {}),
   })
 }
+
+/** getPermissionList GET /api/spaceUser/permission/list */
+export async function getPermissionListUsingGet(
+  // 叠加生成的Param类型 (非body参数swagger默认没有生成对象)
+  params: API.getPermissionListUsingGETParams,
+  options?: { [key: string]: any }
+) {
+  return request<API.BaseResponseListString_>('/api/spaceUser/permission/list', {
+    method: 'GET',
+    params: {
+      ...params,
+    },
+    ...(options || {}),
+  })
+}

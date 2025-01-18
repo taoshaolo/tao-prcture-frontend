@@ -1,9 +1,11 @@
 import axios from 'axios'
 import { message } from 'ant-design-vue'
 
+
+const isDev = process.env.NODE_ENV === 'development'
 // 创建 Axios 实例
 const myAxios = axios.create({
-  baseURL: 'http://localhost:8123',
+  baseURL: isDev ?'http://localhost:8123' : '',
   timeout: 60000,
   withCredentials: true,
 })
@@ -35,6 +37,10 @@ myAxios.interceptors.response.use(
         window.location.href = `/user/login?redirect=${window.location.href}`
       }
     }
+    // 无权限 跳转到 /noAuth
+    // if (data.code === 40101) {
+    //   message.warning(data.message)
+    // }
     return response
   },
   function (error) {

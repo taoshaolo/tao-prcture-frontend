@@ -83,6 +83,12 @@ declare namespace API {
     message?: string
   }
 
+  type BaseResponseListString_ = {
+    code?: number
+    data?: string[]
+    message?: string
+  }
+
   type BaseResponseLoginUserVO_ = {
     code?: number
     data?: LoginUserVO
@@ -216,6 +222,11 @@ declare namespace API {
   type GetOutPaintingTaskResponse = {
     output?: Output1
     requestId?: string
+  }
+
+  type getPermissionListUsingGETParams = {
+    /** id */
+    id?: number
   }
 
   type getPictureByIdUsingGETParams = {

@@ -1,11 +1,10 @@
 <template>
   <div id="spaceManageView">
     <a-flex justify="space-between">
-      <h2>空间管理</h2>
-      <a-space></a-space>
+      <h2>成员信息</h2>
     </a-flex>
     <div style="margin-bottom: 25px" />
-    <a-form layout="inline" :model="formData" @finish="handleSubmit">
+    <a-form v-if="canManageSpaceUser" layout="inline" :model="formData" @finish="handleSubmit">
       <a-form-item label="用户 id" name="userId">
         <a-input v-model:value="formData.userId" placeholder="请输入用户 id" allow-clear />
       </a-form-item>
@@ -15,28 +14,47 @@
     </a-form>
 
     <!-- 表格 -->
-    <a-table :columns="columns" :data-source="dataList">
+    <a-table :columns="dynamicColumns" :data-source="dataList">
       <template #bodyCell="{ column, record }">
         <template v-if="column.dataIndex === 'userInfo'">
-          <a-space @click="goToUserDetail(record.user?.id)">
-            <a-avatar :src="record.user?.userAvatar" />
-            {{ record.user?.userName }}
-          </a-space>
+          <a @click="goToUserDetail(record.user?.id)">
+            <a-space>
+              <a-avatar :src="record.user?.userAvatar" />
+              {{ record.user?.userName }}
+            </a-space>
+          </a>
         </template>
         <template v-if="column.dataIndex === 'spaceRole'">
           <a-select
+            v-if="canManageSpaceUser"
             v-model:value="record.spaceRole"
             :options="SPACE_ROLE_OPTIONS"
             @change="(value) => editSpaceRole(value, record)"
           />
+          <template v-else>
+            <div v-if="record.spaceRole === 'viewer'">
+              <a-tag color="green">{{ SPACE_ROLE_MAP[record.spaceRole] }}</a-tag>
+            </div>
+            <div v-else-if="record.spaceRole === 'editor'">
+              <a-tag color="blue">{{ SPACE_ROLE_MAP[record.spaceRole] }}</a-tag>
+            </div>
+            <div v-else-if="record.spaceRole === 'admin'">
+              <a-tag color="pink">{{ SPACE_ROLE_MAP[record.spaceRole] }}</a-tag>
+            </div>
+          </template>
         </template>
         <template v-else-if="column.dataIndex === 'createTime'">
           {{ dayjs(record.createTime).format('YYYY-MM-DD HH:mm:ss') }}
         </template>
         <template v-else-if="column.key === 'action'">
-          <a-space wrap>
-            <a-button type="link" danger @click="doDelete(record.id)">删除</a-button>
-          </a-space>
+          <a-popconfirm
+            title="你确定删除吗？"
+            ok-text="是"
+            cancel-text="否"
+            @confirm="doDelete(record.id)"
+          >
+            <a-button type="primary" ghost danger>删除</a-button>
+          </a-popconfirm>
         </template>
       </template>
     </a-table>
@@ -44,14 +62,15 @@
 </template>
 
 <script lang="ts" setup>
-import { defineProps, onMounted, reactive, ref } from 'vue'
+import { computed, defineProps, onMounted, reactive, ref } from 'vue'
 import { message } from 'ant-design-vue'
 import dayjs from 'dayjs'
-import { SPACE_ROLE_OPTIONS } from '@/constants/space'
+import { SPACE_PERMISSION_ENUM, SPACE_ROLE_MAP, SPACE_ROLE_OPTIONS } from '@/constants/space'
 import {
   addSpaceUserUsingPost,
   deleteSpaceUserUsingPost,
   editSpaceUserUsingPost,
+  getPermissionListUsingGet,
   listSpaceUserUsingPost,
 } from '@/api/spaceUserController'
 import { useRouter } from 'vue-router'
@@ -70,11 +89,19 @@ const columns = [
     title: '创建时间',
     dataIndex: 'createTime',
   },
-  {
-    title: '操作',
-    key: 'action',
-  },
 ]
+
+// 动态生成列
+const dynamicColumns = computed(() => {
+  let cols = [...columns]
+  if (canManageSpaceUser.value) {
+    cols.push({
+      title: '操作',
+      key: 'action',
+    })
+  }
+  return cols
+})
 
 // 定义属性
 interface Props {
@@ -85,6 +112,17 @@ const props = defineProps<Props>()
 
 // 数据
 const dataList = ref([])
+
+const permissionList = ref<string[]>()
+
+// 通用权限检查函数
+function createPermissionChecker(permission: string) {
+  return computed(() => {
+    return (permissionList.value ?? []).includes(permission)
+  })
+}
+
+const canManageSpaceUser = createPermissionChecker(SPACE_PERMISSION_ENUM.SPACE_USER_MANAGE)
 
 // 获取数据
 const fetchData = async () => {
@@ -102,9 +140,22 @@ const fetchData = async () => {
   }
 }
 
+// 获取权限
+const getPermissionList = async () => {
+  const res = await getPermissionListUsingGet({
+    id: props.id,
+  })
+  if (res.data.code === 0 && res.data.data) {
+    permissionList.value = res.data.data
+  } else {
+    message.error('获取权限失败，' + res.data.message)
+  }
+}
+
 // 页面加载时请求一次
 onMounted(() => {
   fetchData()
+  getPermissionList()
 })
 
 const editSpaceRole = async (value, record) => {
@@ -116,6 +167,7 @@ const editSpaceRole = async (value, record) => {
     message.success('修改成功')
   } else {
     message.error('修改失败，' + res.data.message)
+    fetchData()
   }
 }
 
