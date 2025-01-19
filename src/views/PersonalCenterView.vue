@@ -206,7 +206,7 @@ const beforeUpload = (file: UploadProps['fileList'][number]) => {
   border-radius: 5px;
 }
 
-div:where(.css-dev-only-do-not-override-1p3hq3p).ant-typography, :where(.css-dev-only-do-not-override-1p3hq3p).ant-typography p{
+div:where(.css-1p3hq3p).ant-typography, :where(.css-1p3hq3p).ant-typography p {
   margin-bottom: 0 !important;
 }
 </style>
