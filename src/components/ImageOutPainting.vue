@@ -76,9 +76,10 @@ const createTask = async () => {
     // 开启轮询
     startPolling()
     // 将上传成功的图片信息传递给父组件
-    props.onSuccess?.(res.data.data)
-    closeModal()
+    // props.onSuccess?.(res.data.data)
+    // closeModal()
   } else {
+    console.log('创建任务失败' + res.data.message)
     message.error('创建任务失败，' + res.data.message)
   }
 }
@@ -98,18 +99,19 @@ const startPolling = () => {
       })
       if (res.data.code === 0 && res.data.data) {
         const taskResult = res.data.data.output
-        if (taskResult.status === 'SUCCESS') {
+        if (taskResult.taskStatus === 'SUCCEEDED') {
           message.success('扩图任务执行成功')
           resultImageUrl.value = taskResult.outputImageUrl
           // 停止轮询
           stopPolling()
-        } else if (taskResult.status === 'FAILED') {
+        } else if (taskResult.taskStatus === 'FAILED') {
           message.error('扩图任务执行失败:',taskResult.message)
           // 停止轮询
           stopPolling()
         }
       }
     } catch (e) {
+      console.error('扩图任务轮询失败：', e)
       message.error('扩图任务轮询失败：' + e)
       // 停止轮询
       stopPolling()

@@ -3,7 +3,7 @@ import { message } from 'ant-design-vue'
 
 // 区分开发和生产环境
 const DEV_BASE_URL = "http://localhost:8123";
-const PROD_BASE_URL = "http://taoshao.icu";
+const PROD_BASE_URL = "http://49.232.232.166";
 
 const isDev = process.env.NODE_ENV === 'development'
 // 创建 Axios 实例
